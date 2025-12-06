@@ -24,4 +24,4 @@ El flujo de trabajo implementado incluye:
 ## 🛠️ Instalación y Uso
 1. Clonar el repositorio:
    ```bash
-   git clone [https://github.com/TU_USUARIO/machine-learning-churn.git](https://github.com/TU_USUARIO/machine-learning-churn.git)
+   git clone [https://github.com/TU_USUARIO/machine-learning-churn.git](https://github.com/sebamarinovic/prediccion-churn-telecom)
