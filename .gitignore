@@ -1,0 +1,16 @@
+# --- Archivos de Jupyter/Colab (Muy importante) ---
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# --- Archivos de Sistema Operativo ---
+.DS_Store
+Thumbs.db
+
+# --- Archivos compilados de Python ---
+__pycache__/
+*.py[cod]
+
+# --- Entornos Virtuales (Si los usaras) ---
+env/
+venv/
+.env
