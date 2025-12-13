@@ -61,6 +61,6 @@ Dada la naturaleza del negocio, esta curva nos ayuda a decidir el umbral de cort
 3.  Ejecutar el Notebook en Jupyter o Google Colab.
 
 ---
-**Autor:** [Tu Nombre]
+**Autor:** Sebastian Marinovic - Ricardo Lizana - Luis Gutierrez
 **Asignatura:** Machine Learning II - CDD4018
 **Fecha:** Diciembre 2025
