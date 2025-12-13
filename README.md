@@ -1,67 +1,66 @@
-# Predicción de Fuga de Clientes (Telecom Churn Prediction) 📡
+# Predicción de Fuga de Clientes: Regresión Logística Avanzada 📉🚫
 
-Este repositorio contiene la solución a la **Actividad 1** de la asignatura **Machine Learning II**. El proyecto consiste en la construcción y evaluación de modelos de clasificación supervisada para predecir la probabilidad de que un cliente abandone una empresa de telecomunicaciones ("Churn").
+Este repositorio contiene la solución a la **Actividad 1** de la asignatura **Machine Learning II**. El proyecto se centra en la construcción de modelos predictivos interpretables para identificar la fuga de clientes (*Churn*), utilizando técnicas avanzadas de ingeniería de características y regularización.
 
 ## 📄 Contexto del Problema
 
-Una empresa de telecomunicaciones busca identificar tempranamente a los clientes con alto riesgo de fuga para diseñar campañas de retención efectivas. Se trabajó con un dataset histórico que incluye características demográficas, de servicios contratados y de facturación.
+El objetivo es predecir la probabilidad de que un cliente abandone una empresa de telecomunicaciones. El desafío principal radica en:
+1.  **Desbalance de Clases:** La mayoría de los clientes se quedan, lo que hace que el *Accuracy* sea una métrica engañosa.
+2.  **No Linealidad:** Las relaciones entre el uso del servicio y la cancelación no siempre son lineales.
 
-* **Variable Objetivo:** `Churn` (1 = Se va, 0 = Se queda).
-* **Desafío Principal:** El desbalance de clases (la tasa de fuga es aprox. 26.5%) y la necesidad de capturar relaciones no lineales entre variables.
+## 🛠️ Tecnologías y Metodología
 
-## 🛠️ Tecnologías Utilizadas
+**Stack:** Python, Pandas, Scikit-learn, Matplotlib, Seaborn.
 
-El proyecto fue desarrollado en **Python** utilizando el siguiente stack tecnológico:
+**Flujo de Trabajo:**
+1.  **Preprocesamiento:** Limpieza de datos (`TotalCharges`), imputación y codificación (`OneHotEncoder`, `StandardScaler`).
+2.  **Modelo Base:** Regresión Logística estándar.
+3.  **Ingeniería de Características:** Generación de **Polinomios de Grado 2** e interacciones para capturar patrones complejos.
+4.  **Regularización y Selección:** Aplicación de **Lasso (L1)** para seleccionar automáticamente las variables relevantes y descartar el ruido generado por los polinomios.
 
-* **Pandas & NumPy:** Limpieza, manipulación de datos e ingeniería de características.
-* **Scikit-learn:**
-    * *Preprocesamiento:* `StandardScaler`, `OneHotEncoder`, `SimpleImputer`.
-    * *Modelado:* `LogisticRegression`.
-    * *Ingeniería de Features:* `PolynomialFeatures`.
-    * *Selección de Modelos:* `GridSearchCV`, `StratifiedKFold`.
-    * *Métricas:* AUC-ROC, Precision-Recall, F1-Score, Matriz de Confusión.
-* **Matplotlib & Seaborn:** Visualización de datos y evaluación de modelos.
+## 📊 Resultados Visuales
 
-## 🚀 Metodología
+### 1. Impacto de la Complejidad (Curvas ROC)
+La inclusión de polinomios y la posterior regularización mejoraron la capacidad de discriminación del modelo, elevando el AUC significativamente respecto al modelo base.
 
-El flujo de trabajo implementado se divide en 4 etapas principales:
+![Comparación ROC](images/roc_comparison_act1.png)
 
-1.  **Preprocesamiento y Limpieza:**
-    * Tratamiento de valores nulos en variables numéricas (`TotalCharges`).
-    * Codificación de variables categóricas mediante `OneHotEncoder`.
-    * Estandarización de variables numéricas.
+### 2. Desempeño del Mejor Modelo (Lasso)
+El modelo final (Polinomial + L1) logra un buen equilibrio, priorizando la precisión (evitar falsas alarmas) sobre el recall.
 
-2.  **Modelado Iterativo:**
-    * **Modelo Base:** Regresión Logística estándar sin penalización.
-    * **Modelo Polinomial:** Generación de interacciones de grado 2 para capturar relaciones complejas entre variables numéricas.
-    * **Modelo Regularizado:** Aplicación de penalizaciones **L1 (Lasso)** y **L2 (Ridge)** para controlar la complejidad y evitar el sobreajuste.
+![Matriz de Confusión](images/confusion_matrix_lasso.png)
 
-3.  **Optimización:**
-    * Uso de `GridSearchCV` para encontrar el hiperparámetro óptimo de regularización ($C$).
+### 3. Trade-off Precisión-Recall
+Dada la naturaleza del negocio, esta curva nos ayuda a decidir el umbral de corte óptimo según el presupuesto de retención disponible.
 
-## 📊 Resultados Clave
+![Precision-Recall](images/pr_curve_act1.png)
 
-El mejor modelo seleccionado fue la **Regresión Logística con Transformaciones Polinomiales y Regularización L1 (Lasso)**.
+## 💡 Conclusiones Clave
 
-| Métrica | Resultado | Interpretación |
-| :--- | :--- | :--- |
-| **AUC-ROC** | **0.8475** | Alta capacidad del modelo para distinguir entre clientes que se van y los que se quedan. |
-| **Accuracy** | 0.81 | Un buen rendimiento general, aunque influenciado por el desbalance de clases. |
-| **Recall (Churn)**| 0.54 | Se logra detectar al 54% del total de fugas reales. |
-| **Precision** | 0.67 | De los clientes alertados como riesgo, el 67% efectivamente abandonó la empresa. |
-
-### 💡 Análisis de Regularización
-La selección automática de la penalización **L1 (Lasso)** fue crítica para el éxito del modelo. De las 36 variables generadas (por los polinomios), **el modelo eliminó automáticamente 6 variables** (asignándoles coeficiente 0), reduciendo la complejidad en un **16.7%** y filtrando el ruido.
+* **Feature Selection Automático:** La regularización **L1 (Lasso)** fue fundamental. De las **36 variables** generadas (incluyendo interacciones complejas), el modelo **eliminó automáticamente el ~16%**, dejando solo las que realmente aportan valor predictivo.
+* **Métricas:** Se alcanzó un **AUC-ROC de ~0.85**. Aunque el Accuracy es del 81%, el análisis crítico revela que el desafío persiste en el **Recall (54%)**, indicando que es difícil detectar a *todos* los clientes que se van sin generar muchos falsos positivos.
 
 ## 📂 Estructura del Repositorio
 
-* `actividad1_ML2.ipynb`: Jupyter Notebook con el código completo, desde la carga de datos hasta la evaluación final.
+* `actividad1_ML2.ipynb`: Notebook con el código completo (Preprocesamiento, Modelado, GridSearch).
 * `data-churn.csv`: Dataset utilizado.
+* `images/`: Gráficos generados para este reporte.
+* `requirements.txt`: Lista de dependencias.
 * `README.md`: Documentación del proyecto.
 
-## 💻 Instrucciones de Ejecución
+## 💻 Instrucciones de Instalación
 
-1. Clonar este repositorio.
-2. Instalar las dependencias necesarias:
-   ```bash
-   pip install pandas numpy scikit-learn matplotlib seaborn
+1.  Clonar el repositorio:
+    ```bash
+    git clone [https://github.com/sebamarinovic/actividad1_ML2.git](https://github.com/sebamarinovic/actividad1_ML2.git)
+    ```
+2.  Instalar dependencias:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  Ejecutar el Notebook en Jupyter o Google Colab.
+
+---
+**Autor:** [Tu Nombre]
+**Asignatura:** Machine Learning II - CDD4018
+**Fecha:** Diciembre 2025
